@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ljw.ssme.dao.AccountDao">
+	<select id="getAllPlatform" resultType="platform">
+	select distinct platform value
+	<include refid="whereSql"></include>
+	</select>
+	
+	<select id="getTotalCount" resultType="int">
+	select count(*)
+	<include refid="whereSql"></include>
+	</select>
+	
+	<select id="getAccountData" resultType="Account">
+	select *
+	<include refid="whereSql"></include>
+	limit #{index},#{pageSize}
+	</select>
+	
+	
+	<select id="findAccountByName" resultType="Account">
+	select * from account where account_name = #{accountName}
+	</select>
+	
+	<insert id="addAccount">
+		<selectKey keyProperty="id" order="BEFORE" resultType="int">
+			select max(id) + 1 from account
+		</selectKey>
+		insert into account(id,account_name, platform) values(#{id},#{account_name}, #{platform})
+	</insert>
+	
+	<sql id="whereSql">
+	from account
+	</sql>
+
+</mapper>

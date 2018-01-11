@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ljw.ssme.dao.MenusDao">
+
+	<resultMap type="Menu" id="menuMapper">
+		<id property="id" column="p_id"/>
+		<result property="name" column="p_name"/>
+		<result property="url" column="p_url"/>
+		<collection property="children" javaType="java.util.List" ofType="Menu">
+			<id property="id" column="c_id"/>
+			<result property="name" column="c_name"/>
+			<result property="url" column="c_url"/>
+		</collection>
+	</resultMap>
+	
+	<select id="getMenus" resultMap="menuMapper">
+		select p.id p_id, p.name p_name, p.url p_url, c.id c_id, c.url c_url, c.name c_name
+		from sys_menus p join sys_menus c on p.id = c.pid
+	</select>
+	
+	<select id="treeMenus" resultType="Menu">
+		select id, url as page, pid, name from sys_menus
+	</select>
+	
+</mapper>
